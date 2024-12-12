@@ -54,6 +54,6 @@ oc create secret generic system-database \
   --from-file=DB_SSL_CA=rootCA.crt \
   --from-file=DB_SSL_CERT=client.crt \
   --from-file=DB_SSL_KEY=client.key \
-  --labels=app=3scale-api-management,threescale_component=zync
+  --labels=app=3scale-api-management,threescale_component=system
 ```
 set your passwords as you wish using postgres above as an example
