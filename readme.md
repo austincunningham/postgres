@@ -47,7 +47,7 @@ e.g. system-database
 ```bash
 oc create secret generic system-database \
   --from-literal=DATABASE_SSL_MODE=verify-ca \
-  --from-literal=URL=postgresql://postgres:postgres@postgres-zync.postgres.svc.cluster.local/zync_production \
+  --from-literal=URL=postgresql://postgres:postgres@postgres-system.postgres.svc.cluster.local/system \
   --from-literal=DB_USER=postgres \
   --from-literal=DB_PASSWORD=postgres \
   --from-file=DB_SSL_CA=rootCA.crt \
