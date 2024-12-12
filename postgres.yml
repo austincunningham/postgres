@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
+      volumes:
+        - name: tls-secret
+          secret:
+            secretName: postgres-tls
+        - name: writable-certificates
+          emptyDir: {}
+      initContainers:
+        - name: copy-certificates
+          image: busybox
+          command:
+            - sh
+            - "-c"
+            - |
+              cp /secret/certs/* /writable-certs/ && \
+              chmod 600 /writable-certs/server.key && \
+              chown 999:999 /writable-certs/server.key
+          volumeMounts:
+            - name: tls-secret
+              mountPath: /secret/certs
+              readOnly: true
+            - name: writable-certificates
+              mountPath: /writable-certs
+      containers:
+        - name: postgres
+          image: postgres:14
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "system"
+          volumeMounts:
+            - name: writable-certificates
+              mountPath: /etc/certs
+          ports:
+            - containerPort: 5432
+          args:
+            - "postgres"
+            - "-c"
+            - "ssl=on"
+            - "-c"
+            - "ssl_cert_file=/etc/certs/server.crt"
+            - "-c"
+            - "ssl_key_file=/etc/certs/server.key"
+            - "-c"
+            - "ssl_ca_file=/etc/certs/rootCA.crt"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-system
+spec:
+  selector:
+    app: postgres
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+
+
