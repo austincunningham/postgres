@@ -41,8 +41,7 @@ oc create secret generic zync \
   --from-literal=ZYNC_DATABASE_PASSWORD=password \
   --from-file=DB_SSL_CA=rootCA.crt \
   --from-file=DB_SSL_CERT=client.crt \
-  --from-file=DB_SSL_KEY=client.key \
-  --labels=app=3scale-api-management,threescale_component=zync
+  --from-file=DB_SSL_KEY=client.key 
 ```
 e.g. system-database 
 ```bash
@@ -53,7 +52,6 @@ oc create secret generic system-database \
   --from-literal=DB_PASSWORD=postgres \
   --from-file=DB_SSL_CA=rootCA.crt \
   --from-file=DB_SSL_CERT=client.crt \
-  --from-file=DB_SSL_KEY=client.key \
-  --labels=app=3scale-api-management,threescale_component=system
+  --from-file=DB_SSL_KEY=client.key 
 ```
 set your passwords as you wish using postgres above as an example
