@@ -38,7 +38,7 @@ oc create secret generic zync \
   --namespace=3scale-test \
   --from-literal=DATABASE_SSL_MODE=verify-ca \
   --from-literal=DATABASE_URL=postgresql://postgres:postgres@postgres-zync.postgres.svc.cluster.local/zync_production \
-  --from-literal=ZYNC_DATABASE_PASSWORD=password \
+  --from-literal=ZYNC_DATABASE_PASSWORD=postgres \
   --from-file=DB_SSL_CA=rootCA.crt \
   --from-file=DB_SSL_CERT=client.crt \
   --from-file=DB_SSL_KEY=client.key 
