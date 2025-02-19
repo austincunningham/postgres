@@ -31,3 +31,7 @@ kubectl create secret generic postgres-tls \
 oc apply -f postgres.yml
 oc apply -f postgres-zync.yml
 
+oc wait --for=condition=Ready pod -l app=postgres-zync --timeout=60s && \
+oc exec -it $(kubectl get pod -l app=postgres-zync -o jsonpath='{.items[0].metadata.name}') -- psql -U postgres -c "CREATE DATABASE zync_production;"
+
+
